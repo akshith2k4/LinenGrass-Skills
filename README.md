@@ -1,6 +1,55 @@
-# LinenGrass Agent Skills
+<p align="center">
+  <img src="assets/linengrass-logo.jpg" alt="LinenGrass Logo" width="140" style="border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
+</p>
 
-A production-grade, four-stage AI agent engineering workflow suite compliant with the [Agent Skills specification](https://agentskills.io/) and verified with [NVIDIA SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) (Grade A across all skills).
+<h1 align="center">LinenGrass Agent Skills</h1>
+
+<p align="center">
+  <strong>Production-grade, four-stage AI agent engineering workflow suite</strong><br>
+  Compliant with the <a href="https://agentskills.io/">Agent Skills specification</a> and verified with <a href="https://github.com/NVIDIA/SkillEvaluator">NVIDIA SkillEvaluator</a> (Grade A across all skills).
+</p>
+
+<p align="center">
+  <a href="#quick-installation"><img src="https://img.shields.io/badge/install_with-npx_skills-black?style=flat-square&logo=npm" alt="Install with npx skills"></a>
+  <a href="#nvidia-skillevaluator-verification"><img src="https://img.shields.io/badge/NVIDIA_SkillEvaluator-Grade_A-76B900?style=flat-square&logo=nvidia" alt="NVIDIA SkillEvaluator Grade A"></a>
+  <img src="https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square" alt="License">
+</p>
+
+---
+
+## Quick Installation
+
+Install any or all LinenGrass skills directly into any agent environment (Claude Code, Antigravity, Cursor, Codex, OpenCode, Hermes) using `npx skills`:
+
+### 1. Add all skills to your project
+```bash
+npx skills add akshith2k4/LinenGrass-Skills
+```
+
+### 2. Add all skills globally across all agents
+```bash
+npx skills add akshith2k4/LinenGrass-Skills --all -g
+```
+
+### 3. Add specific skills
+```bash
+# Add only the implementation skill
+npx skills add akshith2k4/LinenGrass-Skills --skill implement
+
+# Add only the planning skill
+npx skills add akshith2k4/LinenGrass-Skills --skill plan
+
+# Add only the codebase understanding skill
+npx skills add akshith2k4/LinenGrass-Skills --skill understand
+
+# Add only the decision-grilling skill
+npx skills add akshith2k4/LinenGrass-Skills --skill grill-me-all-at-once
+```
+
+### 4. Use a skill on-demand without installing
+```bash
+npx skills use akshith2k4/LinenGrass-Skills@plan
+```
 
 ---
 
@@ -44,28 +93,18 @@ Every skill in this repository is audited against static analysis rules, schema 
 
 ---
 
-## How to Install and Use
+## Running Validation Locally
 
-### In Claude Code / Codex / Hermes / OpenCode
-Clone or add the skills to your project or global skill path:
-
-```bash
-# Global installation (available to all agent sessions)
-mkdir -p ~/.agents/skills
-cp -r skills/* ~/.agents/skills/
-
-# Or link directly into your repository
-git clone https://github.com/akshith2k4/LinenGrass-Skills.git
-ln -s "$(pwd)/LinenGrass-Skills/skills" .agents/skills
-```
-
-### Running Checks Locally
 To run quality and schema validation using NVIDIA SkillEvaluator:
 
 ```bash
-# Install / run with uv
+# Validate harness loading
 uvx skillevaluator harness-check skills/implement
+
+# Run quality scoring across Correctness, Reliability, and Efficiency
 uvx skillevaluator quality-check skills/implement
+
+# Run Tier 1 static checks
 uvx skillevaluator tier1 skills/implement --no-llm
 ```
 

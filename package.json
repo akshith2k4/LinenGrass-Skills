@@ -1,0 +1,27 @@
+{
+  "name": "linengrass-skills",
+  "version": "1.0.0",
+  "description": "Production-grade, four-stage AI agent engineering workflow suite for LinenGrass",
+  "keywords": [
+    "agent-skills",
+    "ai-agents",
+    "claude-code",
+    "antigravity",
+    "codex",
+    "copilot-cli",
+    "opencode",
+    "hermes",
+    "skills"
+  ],
+  "author": "LinenGrass",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akshith2k4/LinenGrass-Skills.git"
+  },
+  "files": [
+    "skills",
+    "assets",
+    "README.md"
+  ]
+}

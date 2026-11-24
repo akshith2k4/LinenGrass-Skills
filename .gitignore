@@ -11,6 +11,7 @@ Thumbs.db
 reports/
 *.html
 *.json
+!package.json
 !skills/**
 !*.json.example
 
@@ -19,3 +20,4 @@ reports/
 .env
 .env.*
 !.env.example
+
