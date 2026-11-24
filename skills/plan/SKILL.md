@@ -118,6 +118,28 @@ For Medium/Complex plans, name at least one alternative you rejected and why. Th
 - Whether the change is reversible, and how
 - Any dependency on another team, service, or external system
 
+#### Step 4.5 — Design the Testing Plan & Ask for Developer Sign-Off
+Testing cannot be an afterthought during implementation; it must be designed, scoped, and agreed upon during planning.
+
+1. **Define the testing strategy across four levels**:
+   - **Unit tests**: Exact test files to create or modify, functions/methods to test, and assertions to verify.
+   - **Integration / UI tests**: End-to-end user flows, rendering states (empty, loading, error, success), and component wiring.
+   - **Critical edge cases**: Boundary conditions, invalid/null inputs, network failures, timeouts, and unauthorized actions.
+   - **Exact verification command**: The specific CLI command (e.g. `npm test -- tests/orders.test.ts` or `pytest tests/test_orders.py`).
+
+2. **Mandatory Interactive Gate (Ask the Developer)**:
+   Before locking the plan into `docs/plans/`, explicitly present the proposed testing plan to the developer:
+   ```text
+   Here is the proposed testing plan for this change:
+   - Unit tests: <list of test files and planned assertions>
+   - Integration / UI flows: <flows to test>
+   - Edge cases: <boundary conditions and error states>
+   - Verification command: <exact CLI command>
+
+   Does this testing plan cover everything, or would you like to add or adjust any test scenarios?
+   ```
+   Incorporate the developer's feedback and record their confirmation in the plan under `## Testing strategy & Developer Sign-Off`.
+
 ### Phase 5 — Write the Plan Document
 Save to `docs/plans/YYYY-MM-DD-<task-slug>.md` using the template below. Keep it tight: describe what changes and where, not full implementations. Short pseudo-code or a 2–3 line snippet is allowed only where the approach would be ambiguous without it.
 
@@ -129,6 +151,7 @@ Run this checklist against the written plan. If any item fails, fix the plan bef
 - [ ] No task says "audit", "investigate", or "determine" — those are done
 - [ ] No placeholder code ("add validation here") and no full-file dumps
 - [ ] Every task has a verification step (command + expected result)
+- [ ] Testing plan covers unit, integration, and edge cases, with developer sign-off
 - [ ] Every referenced skill exists in `skills/*/SKILL.md`
 - [ ] Out-of-scope is explicit, not implied
 - [ ] No unresolved grill dependency is silently guessed
@@ -182,10 +205,17 @@ If a task depends on a grill question that was never answered, stop and route ba
 
 ### Task 2: ...
 
-## Testing strategy
-- Unit: ...
-- Integration: ...
-- Manual verification: ...
+## Testing strategy & Developer Sign-Off
+- **Confirmed testing scope:** [e.g. Focused unit + Integration / Full suite at gate]
+- **Unit tests:**
+  - `tests/path.test.ts`: [scenario 1, 2, 3]
+- **Integration / UI tests:**
+  - `tests/path.spec.ts`: [flow 1, 2]
+- **Edge cases covered:**
+  - Boundary: ...
+  - Error paths: ...
+- **Verification command:** `command`
+- **Developer sign-off:** Confirmed (YYYY-MM-DD)
 
 ## Risks and rollback
 | Risk | Detection | Mitigation / rollback |
@@ -209,6 +239,7 @@ If a task depends on a grill question that was never answered, stop and route ba
 - **Referencing a skill that does not exist**. Read `skills/*/SKILL.md` first.
 - **Vague tasks**. "Update the service" is not executable; "Modify `src/services/order.ts:88-120` to call `validateOrder()` before persistence" is.
 - **Dumping full implementations**. The plan is a blueprint, not the code.
+- **Assuming testing scope without asking**. The testing strategy must be explicitly presented to and agreed upon by the developer during planning.
 - **Editing source**. This skill is read-only except for the plan document.
 - **Silently resolving contradictions**. If grill answers conflict with the code or with each other, surface it — do not pick a side quietly.
 - **Over-planning a simple change**. Calibrate to the complexity tier.

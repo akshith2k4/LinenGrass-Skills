@@ -38,6 +38,7 @@ Do not use for: exploratory work (use a spike), planning (use plan), or when the
 | Input | Where it comes from | If missing |
 | :--- | :--- | :--- |
 | **Plan document** | `docs/plans/YYYY-MM-DD-<task>.md` | Stop. Run the plan skill first. |
+| **Confirmed testing plan** | Plan's "Testing strategy" section | Stop. Route back to plan to get developer test sign-off. |
 | **Clean working tree** | `git status --porcelain` is empty | Ask the user to commit or stash; do not proceed. |
 | **Green baseline** | Existing tests pass on main/base | Run the existing suite once. If it is already red, surface that before branching — do not "fix it later". |
 | **No open questions in plan** | Plan's "Open questions" section is empty | Stop. Route back to plan. |
@@ -228,14 +229,14 @@ Do not push, open a PR, or merge without the developer's instruction. Handoff st
 - **Editing before branching**. The first Write/Edit must happen on the new branch.
 - **Branching from a dirty tree**. Stash or commit first — no exceptions.
 - **Skipping the baseline**. A green baseline is how you prove you did not break anything.
-- **Testing task-by-task**. Behavioral test suites run once, after ALL implementation. Per-task testing fragments the change and rewards minimal patches.
-- **Minimal satisfying patches**. "It satisfies the task wording" is not done. Implement the best, complete version the plan describes.
+- **Testing task-by-task**. Run behavioral suites once after full implementation. Per-task testing rewards fragile patches.
+- **Minimal satisfying patches**. Implement the best, complete version the plan describes.
 - **Committing per task / committing untested code**. Commit only after the full implementation is green.
 - **Running tests without asking**. The user chooses the scope; the skill only recommends.
 - **Cheating on tests**. See Phase 5. There is no "just this once".
 - **Silently deviating from the plan**. Append a `## Deviations` note and tell the developer.
 - **`git add -A`**. Stage specific files; do not sweep in unrelated changes.
-- **Committing, pushing, or opening a PR without instruction**. Handoff is review-ready, not shipped.
+- **Committing or pushing without instruction**. Handoff is review-ready, not shipped.
 - **Leaving TODOs / placeholders / stubs**. If it is in the plan, it is implemented fully.
 - **Declaring done with a red, skipped, or un-run test**. Every failure is either fixed or explicitly escalated.
 
