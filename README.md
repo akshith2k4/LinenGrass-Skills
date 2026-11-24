@@ -19,37 +19,28 @@
 
 ## Quick Installation
 
-Install any or all LinenGrass skills directly into any agent environment (Claude Code, Antigravity, Cursor, Codex, OpenCode, Hermes) using `npx skills`:
+To install the skills directly into your project's local folder (inside `.agents/skills/`) without prompting for 70+ external agent symlinks, run:
 
-### 1. Add all skills to your project
 ```bash
-npx skills add akshith2k4/LinenGrass-Skills
+npx skills add akshith2k4/LinenGrass-Skills --copy -y
 ```
 
-### 2. Add all skills globally across all agents
-```bash
-npx skills add akshith2k4/LinenGrass-Skills --all -g
-```
+### Advanced Options
 
-### 3. Add specific skills
-```bash
-# Add only the implementation skill
-npx skills add akshith2k4/LinenGrass-Skills --skill implement
+- **Add globally across all supported agents**:
+  ```bash
+  npx skills add akshith2k4/LinenGrass-Skills --all -g
+  ```
 
-# Add only the planning skill
-npx skills add akshith2k4/LinenGrass-Skills --skill plan
+- **Add a single specific skill**:
+  ```bash
+  npx skills add akshith2k4/LinenGrass-Skills --skill implement --copy -y
+  ```
 
-# Add only the codebase understanding skill
-npx skills add akshith2k4/LinenGrass-Skills --skill understand
-
-# Add only the decision-grilling skill
-npx skills add akshith2k4/LinenGrass-Skills --skill grill-me-all-at-once
-```
-
-### 4. Use a skill on-demand without installing
-```bash
-npx skills use akshith2k4/LinenGrass-Skills@plan
-```
+- **Run on-demand without installing**:
+  ```bash
+  npx skills use akshith2k4/LinenGrass-Skills@plan
+  ```
 
 ---
 
