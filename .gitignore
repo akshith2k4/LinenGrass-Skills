@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Evaluation and test reports
+reports/
+*.html
+*.json
+!skills/**
+!*.json.example
+
+# Logs and environment
+*.log
+.env
+.env.*
+!.env.example
