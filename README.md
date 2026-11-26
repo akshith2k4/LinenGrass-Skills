@@ -81,6 +81,7 @@ Every skill in this repository is audited against static analysis rules, schema 
 | **`plan`** | ✅ PASS (8/8) | ✅ Claude Code, Codex, Copilot CLI, Hermes, OpenClaw, OpenCode | **92.5 / 100** | **Grade A** |
 | **`understand`** | ✅ PASS (8/8) | ✅ Claude Code, Codex, Copilot CLI, Hermes, OpenClaw, OpenCode | **91.2 / 100** | **Grade A** |
 | **`implement`** | ✅ PASS (8/8) | ✅ Claude Code, Codex, Copilot CLI, Hermes, OpenClaw, OpenCode | **95.0 / 100** | **Grade A** |
+| **`module-migration`** | ✅ PASS (10/10) | ✅ Claude Code, Codex, Copilot CLI, Hermes, OpenClaw, OpenCode | **100.0 / 100** | **Grade A** |
 
 ---
 

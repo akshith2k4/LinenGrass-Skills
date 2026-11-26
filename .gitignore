@@ -15,6 +15,9 @@ reports/
 !skills/**
 !*.json.example
 
+# Dependencies
+node_modules/
+
 # Logs and environment
 *.log
 .env
