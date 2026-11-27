@@ -76,10 +76,17 @@ After the developer replies:
 3. **Ask only the genuinely blocked questions**. These are the questions the developer could not answer because their prerequisite was itself unanswered. This should be a short list — if it is long, the questionnaire was poorly scoped, not the developer's fault.
 
 ### Step 6 — Confirm Shared Understanding
-Before any implementation begins, restate the settled decisions as a compact table (Question → Decision → Source: user / recommended / derived) and ask the developer to confirm. The original skill's completion rule still applies: do not act until the user confirms shared understanding.
+Restate the settled decisions as a compact table (Question → Decision → Source: user / recommended / derived) and ask the developer to confirm. The original skill's completion rule still applies: do not act until the user confirms shared understanding. Once confirmed, stop — the decisions table feeds `plan`, it is not permission to implement.
+
+## Handoff
+After the developer confirms the decisions table:
+1. Record the final table (Question → Decision → Source) in the response.
+2. Stop. Do not create a branch, edit source, run implementation commands, or invoke the implement skill.
+3. State that the next step is the `plan` skill, which turns these decisions into a plan document. Implementation begins only after that plan exists and the developer explicitly asks to execute it.
 
 ## Anti-Patterns
 - **Do not dump 40 questions with no structure**. Group by section, number continuously, and mark dependencies.
+- **Do not roll straight into implementation**. Confirmed decisions feed `plan`; they are not a license to code.
 - **Do not ask facts**. If the answer is in the repo or the docs, find it. Asking the developer erodes trust in the skill.
 - **Do not silently resolve a dependency conflict**. If Q1 and Q4 contradict, surface it — do not pick one without telling the developer.
 - **Do not skip the confirmation step**. "All at once" changes the asking model, not the alignment requirement.

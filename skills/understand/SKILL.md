@@ -127,8 +127,15 @@ Write a concise brief to `docs/understanding/<area>.md`:
 ```
 Keep the brief under ~150 lines. The goal is a working mental model, not an essay.
 
+## Handoff
+After saving the brief:
+1. Report the brief path and any open questions still awaiting the developer.
+2. Stop. This skill ends at the understanding brief — do not create a branch, edit source, or start implementing.
+3. State that the next step is `grill-me-all-at-once` to settle the open decisions, followed by `plan`. Do not invoke either automatically unless the developer asks.
+
 ## Anti-Patterns
 - **Do not ask the developer before scanning**. If the answer is in the code or docs, asking wastes their time and signals the skill is not working.
 - **Do not guess at business context**. If neither source answers a question, ask. Do not invent a rationale.
+- **Do not roll into planning or implementation**. The brief is the deliverable; stop and hand off.
 - **Do not write a generic architecture document**. Every claim must cite a specific file path and line, or a specific doc section.
 - **Do not skip tests**. Tests encode expected behavior more reliably than comments.

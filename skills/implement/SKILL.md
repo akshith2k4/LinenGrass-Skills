@@ -15,7 +15,7 @@ metadata:
 ## Overview
 Execute the entire plan document completely on a dedicated branch, then test once at the end.
 
-This skill deliberately rejects the incremental loop of "small change → test → commit → repeat", which often produces minimal, fragile patches that merely satisfy isolated assertions while obscuring integration defects.
+This skill rejects the incremental loop of "small change → test → commit → repeat", which produces minimal, fragile patches that satisfy isolated assertions while obscuring integration defects.
 
 Instead:
 1. **Implement ALL** — read the whole plan, then build every task fully, to the best quality, as one coherent change.
@@ -24,11 +24,17 @@ Instead:
 
 Test integrity is non-negotiable: a test that was weakened, skipped, or mocked into passing is a failed implementation, not a successful one.
 
-Announce at start: "I'm using the implement skill. Creating a branch first, then implementing the full plan before testing."
+Announce at start: "I'm using the implement skill. Creating a local branch, implementing the full plan, then testing."
+
+## Local-Only Policy
+Work stays local.
+- Never `git push`, open a PR, or merge unless the developer explicitly says to publish this branch in this session.
+- A commit is not a push request. If unsure, ask. Handoff ends at local review.
 
 ## When to Use
 - A plan document exists at `docs/plans/YYYY-MM-DD-<task>.md`
 - The plan's self-review passed with no open questions
+- The developer has explicitly asked to execute the plan
 - You are ready to write the full implementation (not spike, not explore)
 
 Do not use for: exploratory work (use a spike), planning (use plan), or when the plan still has open questions — route back to grill-me-all-at-once.
@@ -43,7 +49,7 @@ Do not use for: exploratory work (use a spike), planning (use plan), or when the
 | **Green baseline** | Existing tests pass on main/base | Run the existing suite once. If it is already red, surface that before branching — do not "fix it later". |
 | **No open questions in plan** | Plan's "Open questions" section is empty | Stop. Route back to plan. |
 
-Do not start implementation if any of these fail. A dirty tree or a red baseline turns every future failure into an ambiguous signal.
+Do not start if any fail: a dirty tree or red baseline makes every later failure ambiguous.
 
 ## The Process
 
@@ -210,7 +216,6 @@ Rules:
 - Message ties to the plan name / task
 - Do not commit generated artifacts, secrets, or `.env` files
 - Do not amend or force-push a shared branch
-- Never push without the developer's instruction
 
 #### Step 7.2 — Final verification checklist
 Before declaring the implementation done:
@@ -220,10 +225,9 @@ Before declaring the implementation done:
 - [ ] Typecheck / lint pass (if the project has them)
 - [ ] The plan's "Testing strategy" section records what ran and the result
 - [ ] Branch name matches the convention, working tree is clean, all work committed
+- [ ] No push, PR, or merge was performed — everything exists locally
 - [ ] No secrets, debug logs, TODOs, placeholders, or stray files in the diff (`git diff main...HEAD` reviewed)
 - [ ] A short handoff summary is written: what changed, what was tested, what is still open, and the branch/commit range to review
-
-Do not push, open a PR, or merge without the developer's instruction. Handoff stops at "branch is ready for review".
 
 ## Anti-Patterns
 - **Editing before branching**. The first Write/Edit must happen on the new branch.
@@ -236,16 +240,13 @@ Do not push, open a PR, or merge without the developer's instruction. Handoff st
 - **Cheating on tests**. See Phase 5. There is no "just this once".
 - **Silently deviating from the plan**. Append a `## Deviations` note and tell the developer.
 - **`git add -A`**. Stage specific files; do not sweep in unrelated changes.
-- **Committing or pushing without instruction**. Handoff is review-ready, not shipped.
 - **Leaving TODOs / placeholders / stubs**. If it is in the plan, it is implemented fully.
 - **Declaring done with a red, skipped, or un-run test**. Every failure is either fixed or explicitly escalated.
 
 ## Handoff
 Summarize for the developer:
-- Branch name and commit range
+- Branch name and commit range (local only)
 - Tasks completed (full plan — from the plan checklist)
 - Test scope run and result (from Phase 4, after full implementation)
 - Any deviations or surfaced issues
 - Anything still open
-
-Do not push. Do not open a PR. Wait for the developer's review instruction.

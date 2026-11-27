@@ -13,7 +13,7 @@ metadata:
 # Plan a Linengrass Code Change
 
 ## Overview
-Turn a problem statement + understanding brief + settled grilling decisions into a neat, executable implementation plan. The plan must be specific enough that an engineer with zero context can execute it task by task, and honest enough that every change traces back to a stated problem or a confirmed decision.
+Turn a problem statement + understanding brief + settled grilling decisions into a neat, executable implementation plan. The plan must be specific enough that an engineer with zero context can execute it task by task, list every test case, define what success looks like, and trace every change to a stated problem or confirmed decision.
 
 Read-only on source. Do not create, edit, delete, move, or copy source files. Do not install packages. Do not change git state. The only permitted write is the plan document at `docs/plans/YYYY-MM-DD-<task-slug>.md`.
 
@@ -70,7 +70,7 @@ Calibrate the plan to the size of the change. Over-planning a one-file change is
 
 | Tier | Scope | Plan shape |
 | :--- | :--- | :--- |
-| **Simple** | < 1 hour, one file or a few lines | Short plan: what changes, where, one verification step |
+| **Simple** | < 1 hour, one file or a few lines | Short plan: what changes, where, one test case, one verification step |
 | **Medium** | 1 hour–1 day, several files | File map + numbered tasks + testing section |
 | **Complex** | Multi-day, migrations, new service, cross-cutting | Full template below, phased tasks, risks, rollback |
 
@@ -118,27 +118,56 @@ For Medium/Complex plans, name at least one alternative you rejected and why. Th
 - Whether the change is reversible, and how
 - Any dependency on another team, service, or external system
 
-#### Step 4.5 — Design the Testing Plan & Ask for Developer Sign-Off
-Testing cannot be an afterthought during implementation; it must be designed, scoped, and agreed upon during planning.
+#### Step 4.5 — Enumerate Every Test Case
+The plan must state every case it will test, not a summary of test levels.
 
-1. **Define the testing strategy across four levels**:
-   - **Unit tests**: Exact test files to create or modify, functions/methods to test, and assertions to verify.
-   - **Integration / UI tests**: End-to-end user flows, rendering states (empty, loading, error, success), and component wiring.
-   - **Critical edge cases**: Boundary conditions, invalid/null inputs, network failures, timeouts, and unauthorized actions.
-   - **Exact verification command**: The specific CLI command (e.g. `npm test -- tests/orders.test.ts` or `pytest tests/test_orders.py`).
+1. **Build a test case matrix** with an ID, level, test file, scenario/input, and expected result for each case (see template). Cover at minimum:
+   - **Happy paths** — every behavior the change adds or alters.
+   - **Boundaries** — empty, minimum, maximum, off-by-one, unicode/whitespace.
+   - **Invalid/null inputs** — missing fields, wrong types, malformed payloads.
+   - **Error paths** — network failures, timeouts, database errors, partial failures.
+   - **Authorization** — unauthenticated and unauthorized actors.
+   - **UI states** — empty, loading, error, success.
+   - **Regressions** — existing behavior the change could break.
 
-2. **Mandatory Interactive Gate (Ask the Developer)**:
-   Before locking the plan into `docs/plans/`, explicitly present the proposed testing plan to the developer:
-   ```text
-   Here is the proposed testing plan for this change:
-   - Unit tests: <list of test files and planned assertions>
-   - Integration / UI flows: <flows to test>
-   - Edge cases: <boundary conditions and error states>
-   - Verification command: <exact CLI command>
+   No "etc.", "similar scenarios", or "cover the edge cases": write out every case. A case that cannot be automated is still listed, marked excluded with the reason and how it is verified manually.
 
-   Does this testing plan cover everything, or would you like to add or adjust any test scenarios?
-   ```
-   Incorporate the developer's feedback and record their confirmation in the plan under `## Testing strategy & Developer Sign-Off`.
+2. **Map cases to tasks.** Every task names its TC IDs; every TC maps to a task.
+
+3. **Name the exact verification commands** (e.g. `npm test -- tests/orders.test.ts`) and expected pass counts.
+
+#### Step 4.6 — Define Success Criteria (Definition of Done)
+Define both:
+
+- **Plan readiness** — the document is complete enough to implement: all four inputs recorded with sources; every task has exact paths, TC IDs, and a verification step; every AC names its proving check; developer sign-off recorded; self-review passes with no open questions.
+- **Change completion** — the implementation is successful when every AC is met, every TC passes (none skipped or weakened), verification commands exit 0, out-of-scope is untouched, and no existing test regresses.
+
+  | ID | Criterion | Verified by |
+  | :--- | :--- | :--- |
+  | AC-1 | [observable, binary outcome — not an activity] | `command` → expected result |
+
+  "Works correctly" is not a criterion; "an invalid `items` payload returns `400` and writes no order row" is.
+
+#### Step 4.7 — Mandatory Interactive Gate (Ask the Developer)
+Before locking the plan, present the test cases and success criteria:
+
+```text
+Here is the proposed testing plan and definition of done:
+
+Test cases:
+- TC-1 (Unit, <test file>): <scenario> → <expected result>
+- ...
+
+Success criteria:
+- AC-1: <observable outcome> — verified by <command/observation>
+- ...
+
+Plan ready when <readiness checks pass>; change successful when all AC are met and all TC pass with verification green.
+
+Does this cover everything, or would you like to add, remove, or adjust any test cases or success criteria?
+```
+
+Incorporate the feedback and record confirmation under `## Testing strategy & Developer Sign-Off` and `## Success criteria`.
 
 ### Phase 5 — Write the Plan Document
 Save to `docs/plans/YYYY-MM-DD-<task-slug>.md` using the template below. Keep it tight: describe what changes and where, not full implementations. Short pseudo-code or a 2–3 line snippet is allowed only where the approach would be ambiguous without it.
@@ -151,7 +180,10 @@ Run this checklist against the written plan. If any item fails, fix the plan bef
 - [ ] No task says "audit", "investigate", or "determine" — those are done
 - [ ] No placeholder code ("add validation here") and no full-file dumps
 - [ ] Every task has a verification step (command + expected result)
-- [ ] Testing plan covers unit, integration, and edge cases, with developer sign-off
+- [ ] Every planned test case is enumerated (ID, scenario/input, expected result) — no "etc." or implied cases
+- [ ] Task ↔ TC mapping is complete in both directions
+- [ ] Every AC is observable, binary, and names its proving check
+- [ ] Plan readiness and change completion are defined, with developer sign-off
 - [ ] Every referenced skill exists in `skills/*/SKILL.md`
 - [ ] Out-of-scope is explicit, not implied
 - [ ] No unresolved grill dependency is silently guessed
@@ -170,7 +202,7 @@ If a task depends on a grill question that was never answered, stop and route ba
 **Understanding brief:** `docs/understanding/<area>.md`  
 **Grill decisions:** [path or inline table]  
 **Complexity:** Simple / Medium / Complex  
-**Goal:** [one sentence — what "done" looks like]  
+**Goal:** [one sentence — expanded under Success criteria]  
 **Architecture:** [2–3 sentences on the approach]  
 
 ## Settled decisions carried into this plan
@@ -181,6 +213,22 @@ If a task depends on a grill question that was never answered, stop and route ba
 
 ## Out of scope
 - ...
+
+## Success criteria (Definition of Done)
+
+**Plan ready to implement when:**
+- [ ] All four inputs are recorded with their sources
+- [ ] Every task has exact paths, TC IDs, and a verification step
+- [ ] Every AC names the check that proves it
+- [ ] Developer sign-off is recorded and no open questions remain
+
+**Change successful when:**
+
+| ID | Criterion | Verified by |
+|---|---|---|
+| AC-1 | [observable, binary outcome] | `command` → expected result |
+
+All AC are met, all TC pass, verification commands are green, out-of-scope is untouched, and there are no regressions. If a criterion fails, change the code — never the criterion.
 
 ## File map
 | Action | Path | Responsibility |
@@ -193,6 +241,7 @@ If a task depends on a grill question that was never answered, stop and route ba
 
 ### Task 1: [Component]
 **Skill:** [existing skill name, or "none"]  
+**Test cases:** TC-1, TC-4  
 **Files:**
 - Create: `exact/path`
 - Modify: `exact/path:lines`
@@ -206,16 +255,18 @@ If a task depends on a grill question that was never answered, stop and route ba
 ### Task 2: ...
 
 ## Testing strategy & Developer Sign-Off
-- **Confirmed testing scope:** [e.g. Focused unit + Integration / Full suite at gate]
-- **Unit tests:**
-  - `tests/path.test.ts`: [scenario 1, 2, 3]
-- **Integration / UI tests:**
-  - `tests/path.spec.ts`: [flow 1, 2]
-- **Edge cases covered:**
-  - Boundary: ...
-  - Error paths: ...
-- **Verification command:** `command`
-- **Developer sign-off:** Confirmed (YYYY-MM-DD)
+
+### Test case matrix
+| ID | Level | Test file | Scenario / input | Expected result |
+|---|---|---|---|---|
+| TC-1 | Unit | `tests/path.test.ts` | [input] | [expected output/state] |
+| TC-2 | Integration | `tests/path.spec.ts` | [flow] | [expected output/state] |
+| TC-3 | Edge case | `tests/path.test.ts` | [boundary/error input] | [expected output/state] |
+| TC-4 | Regression | `tests/path.test.ts` | [existing behavior] | [unchanged] |
+
+- **Excluded:** [case — reason and manual check, or "None"]
+- **Verify:** `command` (expected: all pass)
+- **Developer sign-off:** Confirmed (YYYY-MM-DD) — test scope and success criteria
 
 ## Risks and rollback
 | Risk | Detection | Mitigation / rollback |
@@ -239,13 +290,16 @@ If a task depends on a grill question that was never answered, stop and route ba
 - **Referencing a skill that does not exist**. Read `skills/*/SKILL.md` first.
 - **Vague tasks**. "Update the service" is not executable; "Modify `src/services/order.ts:88-120` to call `validateOrder()` before persistence" is.
 - **Dumping full implementations**. The plan is a blueprint, not the code.
-- **Assuming testing scope without asking**. The testing strategy must be explicitly presented to and agreed upon by the developer during planning.
+- **Summarizing test coverage instead of listing cases**. Enumerate every case with input and expected result.
+- **Unfalsifiable success criteria**. Every criterion must name the check that proves it.
+- **Assuming testing scope without asking**. Present the test cases and success criteria for sign-off during planning.
 - **Editing source**. This skill is read-only except for the plan document.
 - **Silently resolving contradictions**. If grill answers conflict with the code or with each other, surface it — do not pick a side quietly.
 - **Over-planning a simple change**. Calibrate to the complexity tier.
 
 ## Handoff
 After saving and self-review, tell the user the plan path and offer execution:
+- Point to the plan's test case matrix and success criteria as the contract for "done".
 - If an execution skill exists in `skills/` (e.g., `implement`), name it.
 - If not, recommend human review of the plan before implementation, then execute task-by-task with the plan open.
-- Do not begin implementation inside this skill.
+- Do not invoke `implement` or begin implementation; wait for an explicit request.
